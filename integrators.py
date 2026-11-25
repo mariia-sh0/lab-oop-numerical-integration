@@ -35,17 +35,17 @@ class BaseIntegrator:
 
     def adaptive_integrate(self, eps=1e-4, initial_n=2):
         """Знаходить інтеграл із заданою точністю eps за правилом Рунге."""
-        n= initial_n
-        divisor = (2**self.order)-1
+        n = initial_n
+        divisor = (2 ** self.order)-1
         I_h = self.integrate(n)
         while True:
-            I_h2 = self.integrate(2*n)
+            I_h2 = self.integrate(2 * n)
             delta = abs(I_h2-I_h)/divisor
-            if delta<eps:
-                I_yt = I_h2+(I_h2-I_h)/divisor
-                n_min = 2*n
+            if delta < eps:
+                I_yt = I_h2 + (I_h2-I_h)/divisor
+                n_min = 2 * n
                 return I_yt, n_min, delta
-            n = n*2
+            n = n * 2
             I_h = I_h2            
 
     def __str__(self):
@@ -65,34 +65,59 @@ class RectangleIntegrator(BaseIntegrator):
 
     def integrate(self, n):
         if n <= 0:
-            raise "Кількість розбиттів n має бути додатною"
-        h = (self.b - self.a)/2 
+            raise ValueError("Кількість розбиттів n має бути додатною")
+        h = (self.b - self.a)/n 
         total = 0.0
         for i in range(n):
             x_mid = self.a + (i + 0.5) * h
             total += self.func(x_mid)
         return total * h
+
+
+
 class TrapezoidIntegrator(BaseIntegrator):
     """Обчислення інтеграла складеною формулою трапецій."""
 
-    order = None
+    order = 2
     method_name = "Формула трапецій"
 
     def __init__(self, func, a, b):
         super().__init__(func, a, b)
 
     def integrate(self, n):
-        pass
+        if n <= 0:
+            raise ValueError("Кількість розбиттів n має бути додатною")
+        h = (self.b - self.a)/n 
+        total = 0.5 * (self.func(self.a) + self.func(self.b))
+        for i in range(1,n):
+            x = self.a + i * h
+            total += self.func(x) 
+        return total * h
 
 
+    
 class SimpsonIntegrator(BaseIntegrator):
     """Обчислення інтеграла складеною формулою Сімпсона."""
 
-    order = None
+    order = 4
     method_name = "Формула Сімпсона"
 
     def __init__(self, func, a, b):
         super().__init__(func, a, b)
 
     def integrate(self, n):
-        pass
+        if n <= 0 or n % 2 != 0:
+            raise ValueError("Кількість розбиттів n має бути додатним парним числом")
+        
+        h = (self.b - self.a)/n 
+        total = (self.func(self.a)+ self.func(self.b))
+    
+        for i in range(1,n):
+            x = self.a + i * h
+            if i%2 == 1:
+                total += 4 * self.func(x)
+            else:
+                total += 2 * self.func(x)
+        return total*(h/3)
+            
+
