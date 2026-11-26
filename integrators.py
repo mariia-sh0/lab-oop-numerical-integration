@@ -33,7 +33,7 @@ class BaseIntegrator:
         """Обчислює наближене значення інтеграла для n розбиттів."""
         raise NotImplementedError
 
-    def adaptive_integrate(self, eps=1e-4, initial_n=2):
+    def adaptive_integrate(self, eps=3e-5, initial_n=2):
         """Знаходить інтеграл із заданою точністю eps за правилом Рунге."""
         n = initial_n
         divisor = (2 ** self.order)-1
