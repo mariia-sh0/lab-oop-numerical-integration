@@ -13,6 +13,7 @@ class BaseIntegrator:
         self.func = func
         self.a = a
         self.b = b
+        self.calls = 0
         
         
 
@@ -64,6 +65,7 @@ class RectangleIntegrator(BaseIntegrator):
         super().__init__(func, a, b)
 
     def integrate(self, n):
+        self.calls += 1
         if n <= 0:
             raise ValueError("Кількість розбиттів n має бути додатною")
         h = (self.b - self.a)/n 
@@ -85,6 +87,7 @@ class TrapezoidIntegrator(BaseIntegrator):
         super().__init__(func, a, b)
 
     def integrate(self, n):
+        self.calls += 1
         if n <= 0:
             raise ValueError("Кількість розбиттів n має бути додатною")
         h = (self.b - self.a)/n 
@@ -106,6 +109,7 @@ class SimpsonIntegrator(BaseIntegrator):
         super().__init__(func, a, b)
 
     def integrate(self, n):
+        self.calls += 1
         if n <= 0 or n % 2 != 0:
             raise ValueError("Кількість розбиттів n має бути додатним парним числом")
         
