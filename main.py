@@ -24,7 +24,7 @@ def main():
         for integrator in integrators:
             res, n_min, delta = integrator.adaptive_integrate(eps)
             print(f"{integrator}:")
-            print(f"  Результат = {res:.7f}, n_min = {n_min}, похибка = {delta:.2e}")
+            print(f"  Результат = {res:.7f}, n_min = {n_min}, похибка = {delta:.2e}, кількість викликів integrate() = {integrator.calls}")
 
 
 if __name__ == "__main__":
